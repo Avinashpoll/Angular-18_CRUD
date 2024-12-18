@@ -1,0 +1,164 @@
+<!-- Include Bootstrap 4 CSS (for modern styling and responsiveness) -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="text-primary mb-4">Employee Portal</h2>
+            <p class="lead text-muted mb-4">
+                The <strong>Employee Portal</strong> is an intuitive, web-based platform designed to simplify your daily tasks. With a sleek and user-friendly interface, it allows employees to easily manage their personal details and interact with essential company services.
+            </p>
+        </div>
+    </div>
+
+    <section class="features py-5">
+        <h4 class="text-info text-center mb-4">Key Features</h4>
+        <div class="row justify-content-center">
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm p-4 text-center h-100 border-light rounded">
+                    <i class="fas fa-plus-circle fa-3x mb-3 text-primary"></i>
+                    <h5 class="card-title text-dark">Create</h5>
+                    <p class="card-text text-muted">Create new employee records, such as personal details, name, email, and address.</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm p-4 text-center h-100 border-light rounded">
+                    <i class="fas fa-eye fa-3x mb-3 text-success"></i>
+                    <h5 class="card-title text-dark">Read</h5>
+                    <p class="card-text text-muted">Easily view your data, such as name, email, and address.</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm p-4 text-center h-100 border-light rounded">
+                    <i class="fas fa-edit fa-3x mb-3 text-warning"></i>
+                    <h5 class="card-title text-dark">Update</h5>
+                    <p class="card-text text-muted">Update your personal information, such as name, email, or any required data at any time.</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card shadow-sm p-4 text-center h-100 border-light rounded">
+                    <i class="fas fa-trash-alt fa-3x mb-3 text-danger"></i>
+                    <h5 class="card-title text-dark">Delete</h5>
+                    <p class="card-text text-muted">Remove outdated or irrelevant records, such as old employee records.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Employee List Section -->
+    <div class="row mb-4">
+        <div class="col-12 col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5>Employee List</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Name</th>
+                                <th>Contact No.</th>
+                                <th>Email Id</th>
+                                <th>Address</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of employeeList; let i = index">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.contactNo }}</td>
+                                <td>{{ item.emailId }}</td>
+                                <td>{{ item.address }}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-primary" (click)="onEdit(item)">Edit</button>
+                                    <button class="btn btn-danger mx-2" (click)="onDelete(item.empId)">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employee Form Section -->
+        <div class="col-12 col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5>{{ employeeForm.controls['empId'].value ? 'Edit Employee' : 'New Employee' }}</h5>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="employeeForm">
+                        <div class="form-row">
+                            <div class="col-12 col-sm-6 mb-3">
+                                <label for="name">Name</label>
+                                <input type="text" formControlName="name" class="form-control" id="name">
+                                <div *ngIf="employeeForm.controls['name'].invalid && submitted" class="text-danger">
+                                    Name is required.
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 mb-3">
+                                <label for="email">Email Id</label>
+                                <input type="email" formControlName="emailId" class="form-control" id="email">
+                                <div *ngIf="employeeForm.controls['emailId'].invalid && submitted" class="text-danger">
+                                    <div *ngIf="employeeForm.controls['emailId'].errors?.['required']">Email is required.</div>
+                                    <div *ngIf="employeeForm.controls['emailId'].errors?.['email']">Invalid email format.</div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 mb-3">
+                                <label for="contact">Contact No.</label>
+                                <input type="text" formControlName="contactNo" class="form-control" id="contact">
+                                <div *ngIf="employeeForm.controls['contactNo'].invalid && submitted" class="text-danger">
+                                    <div *ngIf="employeeForm.controls['contactNo'].errors?.['required']">Contact number is required.</div>
+                                    <div *ngIf="employeeForm.controls['contactNo'].errors?.['pattern']">Invalid contact number (must be 10 digits).</div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 mb-3">
+                                <label for="city">City</label>
+                                <input type="text" formControlName="city" class="form-control" id="city">
+                                <div *ngIf="employeeForm.controls['city'].invalid && submitted" class="text-danger">
+                                    City is required.
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 mb-3">
+                                <label for="state">State</label>
+                                <input type="text" formControlName="state" class="form-control" id="state">
+                                <div *ngIf="employeeForm.controls['state'].invalid && submitted" class="text-danger">
+                                    State is required.
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 mb-3">
+                                <label for="pin-code">Pin Code</label>
+                                <input type="text" formControlName="pinCode" class="form-control" id="pin-code">
+                                <div *ngIf="employeeForm.controls['pinCode'].invalid && submitted" class="text-danger">
+                                    <div *ngIf="employeeForm.controls['pinCode'].errors?.['required']">Pin code is required.</div>
+                                    <div *ngIf="employeeForm.controls['pinCode'].errors?.['pattern']">Invalid pin code (must be 6 digits).</div>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="address">Address</label>
+                                <textarea formControlName="address" class="form-control" id="address"></textarea>
+                                <div *ngIf="employeeForm.controls['address'].invalid && submitted" class="text-danger">
+                                    Address is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row pt-3">
+                            <div class="col-6 text-center">
+                                <button type="button" class="btn btn-secondary" (click)="resetForm()">Reset</button>
+                            </div>
+                            <div class="col-6 text-center">
+                                <button *ngIf="!employeeForm.controls['empId'].value" class="btn btn-primary" (click)="onSave()">Add</button>
+                                <button *ngIf="employeeForm.controls['empId'].value" class="btn btn-warning" (click)="onUpdate()">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
